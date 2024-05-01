@@ -1,6 +1,7 @@
 "use strict";
 
 // SELECTING VARIABLES
+///////////////////////////////////////////////////////////////////////////
 const currentQuestionNumber = document.querySelector(".current-question");
 const questionEl = document.querySelector(".question");
 const questionsEls = document.querySelector(".questions");
@@ -17,11 +18,14 @@ const errorBox = document.querySelector(".incorrect-box");
 let currentScore = 0;
 let highscore = 0;
 let interval;
+
 // RENDERING THE ANSWERS
 const renderAnswer = function (answers) {
   const ans = answers;
   let html;
   ansCons.innerHTML = "";
+
+  // GENERATIGN THE HTML CONTENT
   ans.forEach((_, i) => {
     html = `
     <div class="answers">
@@ -52,27 +56,36 @@ const renderAnswer = function (answers) {
     </div>
       `;
   });
+  // INSERTING THE HTML ON THE DOM
   ansCons.insertAdjacentHTML("afterbegin", html);
 };
 //
 
 // RENDERING ERROR
 const renderError = function (str, error) {
+  // DISPLAYING THE ERROR ELEMENT ON THE DOM
   errorContainer.classList.remove("hidden");
+
+  // RENDERING THE ERROR CONTENT ON THE DOM
   errorBox.innerHTML = "";
   errorBox.insertAdjacentHTML(
     "afterbegin",
     `<span class="error"><ion-icon name="warning-outline"></ion-icon> <span> UPS... ${str} ${
       error?.message ? error?.message : ""
     }</span></span>
-
-<button class="btn-try-again">Tentar novamente</button>`
+    <button class="btn-try-again">Tentar novamente</button>`
   );
 };
+
+// TIMER FUNCTIONS WITH 20 SECS
 const timer = function () {
   let sec = 21;
+
+  // INTERVARL TO DECRESE THE TIMER
   interval = setInterval(() => {
     sec--;
+
+    // STYLING THE TIMER DIV
     load.style.width = `${(sec * 100) / 20}%`;
     if (sec < 1) {
       clearInterval(interval);
@@ -82,25 +95,34 @@ const timer = function () {
   return interval;
 };
 
-const renderSpinner = function () {
+// FUNCTION TO RENDER THE SPINER AND ADDING THE HIDDEN CLASS
+// hidespinner
+const hideSpinner = function () {
   document.querySelector(".spinner").classList.add("hidden");
 };
-
+//showspinner
+const showSpinner = function () {
+  document.querySelector(".spinner").classList.remove("hidden");
+};
+// FUNCTION TO VIBRATE DE DEVICE, MAINLY ON THE MOBILES
 const vibrador = function () {
   if ("vibrate" in navigator) {
-    // Faz o dispositivo vibrar por 1000 milissegundos (1 segundo)
+    // Faz o dispositivo vibrar por 100 milissegundos (0.1 segundo)
     navigator.vibrate(1000);
+  } else {
+    return;
   }
 };
+
+// FECTHING AND LOADING THE QUESTION FROM A THIRD PART API ('https://opentdb.com/api.php?amount=100')
 const loadingQuestion = async function () {
   try {
-    document.querySelector(".spinner").classList.remove("hidden");
     clearInterval(interval);
+    showSpinner();
     const openai = await fetch("https://opentdb.com/api.php?amount=100");
     const data = await openai.json();
-    if (data) renderSpinner();
+    if (data) hideSpinner();
     document.querySelector(".lock").classList.add("hidden");
-
     if (!data) throw new Error("Erro de ligação, por pavor tente novamente");
     if (data.results.length === 0) {
       throw new Error("Sem nenhum resultado, tente novamente");
@@ -109,16 +131,17 @@ const loadingQuestion = async function () {
     return data.results[0];
   } catch (error) {
     renderError("algo correu mal", error);
-    vibrador();
+    // vibrador();
     return null;
   }
 };
 
-// helper function
+// CONSTRUCTOR FUNCTIONS FOR CREATING THE ANSWER OBJECT
 const Obj = function (text, status) {
   this.text = text;
   this.status = status;
 };
+// FUNCTION FOR CREATING THE ANSWER OBJECT LOOPING ON THE ERRAY
 const arrayHelper = function (question) {
   const x = [question.correct_answer, ...question.incorrect_answers];
   const answers = [];
@@ -131,7 +154,9 @@ const arrayHelper = function (question) {
   return answers;
 };
 
+// FUNCTION FORM RANDOMRING THE ARRAY TO DISPLAY THE CORRECT ANSWER ON THE DIFERENT PLACE ON THE DOM
 const randomArray = function (array) {
+  // RANDOM ARRAY
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
@@ -139,11 +164,14 @@ const randomArray = function (array) {
   return array;
 };
 
+// DISPLAYINH THE QUESTION CATEGORY ON THE DOM
 const categoryRender = function (question) {
   questionHeader.innerHTML = "";
   let html = `<h2 class="heading-h2 category">${question.category}</h2>`;
   questionHeader.insertAdjacentHTML("afterbegin", html);
 };
+
+// DISPLAYING THE QUESTION ON THE DOM
 const quesRender = function (question) {
   questionsEls.innerHTML = "";
   questionsEls.insertAdjacentHTML(
@@ -151,6 +179,8 @@ const quesRender = function (question) {
     `<p class="question">${question.question} </p>`
   );
 };
+
+// FUNCTION TO CONSUME THE PROMISE COMING FROM THE FECTHING FUNCTION
 const consumingResponse = function (question) {
   const helper = arrayHelper(question);
   const answers = randomArray(helper);
@@ -158,6 +188,7 @@ const consumingResponse = function (question) {
   quesRender(question);
   renderAnswer(answers);
 };
+// INITIALAZING THE FECTH FUNCTION WITH THEN METHOD
 const init = function () {
   loadingQuestion().then((question) => {
     if (question) {
@@ -167,6 +198,7 @@ const init = function () {
 };
 init();
 
+// HANDLING WITH THE SCORES
 const scores = function () {
   currentScore += 10;
   currentScore > highscore
@@ -175,30 +207,45 @@ const scores = function () {
   document.querySelector(".actual-score").textContent = currentScore;
 };
 
+const handleCorrectAnswer = function (target) {
+  scores();
+  target.classList.add("correct");
+  document.querySelector(".correct-answer-box").classList.add("show");
+  setTimeout(() => {
+    document.querySelector(".correct-answer-box").classList.remove("show");
+    init();
+  }, 3000);
+};
+
+// HANDLING THE INCORRECT
+const handleIncorrectAnswer = function () {
+  currentScore = 0;
+  document.querySelector(".actual-score").textContent = currentScore;
+  document.querySelector(".incorrect-answer-box").classList.add("show");
+  document.querySelector(".high-score").textContent = highscore;
+  setTimeout(() => {
+    document.querySelector(".incorrect-answer-box").classList.remove("show");
+    init();
+  }, 3000);
+};
+
+// CLICK EVENT FUNCTION FOR ANSWER
 const answerClick = function (e) {
   const target = e.target.closest(".answer");
   if (!target) return;
+
+  // LOCKING THE APP WHILE LOADING
   document.querySelector(".lock").classList.remove("hidden");
   if (target.classList.contains("correct-answer")) {
-    // window.location.reload();
-    scores();
-    target.classList.add("correct");
-    document.querySelector(".correct-answer-box").classList.add("show");
-    setTimeout(() => {
-      document.querySelector(".correct-answer-box").classList.remove("show");
-      init();
-    }, 3000);
+    // CALLING THE HANDLE CORRECT FUNCTION
+    handleCorrectAnswer(target);
   } else {
-    currentScore = 0;
-    document.querySelector(".actual-score").textContent = currentScore;
-    document.querySelector(".incorrect-answer-box").classList.add("show");
-    document.querySelector(".high-score").textContent = highscore;
-    setTimeout(() => {
-      document.querySelector(".incorrect-answer-box").classList.remove("show");
-      init();
-    }, 3000);
+    // CALLING THE HANDLE INCORRECT FUNCTION
+    handleIncorrectAnswer(target);
   }
 };
+
+// BTN NEXT EVENT FUNCTION
 const btnClick = function (e) {
   const btn = e.target.closest(".btn-next");
   if (!btn) return;
@@ -207,9 +254,8 @@ const btnClick = function (e) {
     init();
   }, 3000);
 };
-answerContainer.addEventListener("click", answerClick.bind(this));
-answerContainer.addEventListener("click", btnClick.bind(this));
 
+// TRY AGAIN BTN EVENT FUNCTION
 const errorEvent = function (e) {
   const target = e.target.closest(".btn-try-again");
   console.log(target);
@@ -220,4 +266,11 @@ const errorEvent = function (e) {
   currentScore = 0;
   document.querySelector(".actual-score").textContent = currentScore;
 };
-errorBox.addEventListener("click", errorEvent.bind(this));
+
+// ALL EVENT LISTENERS FUNCTIONS
+const allEventListeners = function () {
+  answerContainer.addEventListener("click", answerClick.bind(this));
+  answerContainer.addEventListener("click", btnClick.bind(this));
+  errorBox.addEventListener("click", errorEvent.bind(this));
+};
+allEventListeners();
