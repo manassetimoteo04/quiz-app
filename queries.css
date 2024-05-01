@@ -1,0 +1,68 @@
+@media (max-width: 1000px) {
+  body {
+    padding: 10px;
+  }
+}
+
+@media (max-width: 924px) {
+  .question {
+    font-size: 20px;
+  }
+}
+@media (max-width: 874px) {
+  .questions {
+    padding: 25px 10px;
+  }
+}
+@media (max-width: 759px) {
+  .questions {
+    padding: 25px 10px;
+  }
+  .quiz-container {
+    margin: 40px 20px;
+  }
+}
+@media (max-width: 679px) {
+  .question-box {
+    padding: 40px 20px;
+  }
+  .answer-box {
+    padding: 40px 20px;
+  }
+}
+@media (max-width: 562px) {
+  .question {
+    font-size: 20px;
+  }
+  .ans {
+    font-size: 16px;
+  }
+  .quiz-container {
+    grid-template-columns: repeat(1, 1fr);
+    margin: 0px;
+  }
+  .score {
+    font-size: 18px;
+  }
+  .app {
+    padding: 1rem;
+  }
+  .logo {
+    margin-bottom: 1rem;
+  }
+  .incorrect-answer-box,
+  .correct-answer-box {
+    font-size: 14px;
+  }
+  .incorrect-answer-box,
+  .correct-answer-box {
+    padding: 5px;
+  }
+  .incorrect-answer-box ion-icon,
+  .correct-answer-box ion-icon {
+    font-size: 24px;
+  }
+  .show {
+    top: 3%;
+  }
+}

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quizie</title>
+    <link rel="shortcut icon" href="help-circle-sharp.svg" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="queries.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+        rel="stylesheet">
+    <script defer type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script defer nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdn.lordicon.com/lordicon.js"></script>
+
+    <script defer src="script.js"></script>
+</head>
+
+<body>
+    <section class="app">
+        <div class="spinner ">
+            <lord-icon src="https://cdn.lordicon.com/gkryirhd.json" trigger="loop" state="loop-snake"
+                colors="primary:#ffffff" style="width:100px;height:100px">
+            </lord-icon>
+        </div>
+
+        <div class="correct-answer-box">
+            <p><ion-icon name="checkmark-outline"></ion-icon> <span>Resposta certa!</span></p>
+        </div>
+        <div class="lock"></div>
+        <div class="incorrect-answer-box">
+            <p><ion-icon name="close-outline"></ion-icon> <span>Resposta errada!</span></p>
+        </div>
+        <header class="header">
+            <h1 class="logo">Quizie</h1>
+        </header>
+        <div class="quiz-container">
+            <div class="question-box">
+                <div>
+                    <div class="timer"><span class="load"></span></div>
+
+                    <header class="questions-header">
+                        <h2 class="heading-h2 category">Question</h2>
+                    </header>
+                </div>
+
+
+                <div class="questions">
+                    <p class="question ops">Who scored the fastest goal in the premiere league history?</p>
+                </div>
+                <div class="scores">
+                    <p>Pontos: <span class="actual-score">00</span>
+                    </p>
+                    <p>Maior Pontuação: <span class="high-score">00</span></p>
+                </div>
+            </div>
+            <div class="answer-box">
+                <span class="answer-header">Select Answer</span>
+                <div class="container-ans">
+
+                </div>
+                <!-- <div class="answers">
+                    <div class="answer"><span class="letter">A</span> <span class="ans answer-01">Wayne Rooney</span>
+                    </div>
+                    <div class="answer"><span class="letter">B</span> <span class="ans answer-02">Shane Long</span>
+                    </div>
+                    <div class="answer correct-answer"><span class="letter">C</span> <span
+                            class="ans answer-03">Cristiano
+                            Ronaldo</span>
+                    </div>
+                    <div class="answer"><span class="letter">D</span> <span class="ans answer-03">Theo Walkot</span>
+                    </div>
+                    <button class="btn-next">Next</button>
+                </div> -->
+            </div>
+        </div>
+    </section>
+    <div class="wrong-answer hidden">
+        <div class="incorrect-box">
+            <span class="error"><ion-icon name="warning-outline" class="icon"></ion-icon> <span> UPS... Resposta
+                    incorrecta</span></span>
+
+            <button class="btn-try-again">Tentar novamente</button>
+        </div>
+    </div>
+</body>
+
+</html>
